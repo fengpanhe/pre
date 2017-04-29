@@ -1,3 +1,5 @@
+import pymongo
+
 from AdDb import AdDb
 from UserInstalledappsDb import UserInstalledappsDb
 
