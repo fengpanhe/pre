@@ -17,25 +17,26 @@ class preDb(object):
 
         self.app_categories = []
     
-    def app_categories(self):
+    def calc_app_categories(self):
         app_categories = []
         for line in self.db.app_categories.find():
             if not line["appCategory"] in app_categories:
                 app_categories.append(line["appCategory"])
         self.app_categories = app_categories.copy()
+        print(self.app_categories)
 
     def get_a_train_instance(self,index):
         
-        instance = self.db.train.find().limit(1).skip(index)
-
-        ad = self.db.ad.find({"creativeID":instance['creativeID']})
+        instance = self.db.train.find().limit(1).skip(index)[0]
+        print(str(instance))
+        ad = self.db.ad.find({"creativeID":instance["creativeID"]})[0]
         instance["adID"] = ad["adID"]
         instance["camgaignID"] = ad["camgaignID"]
         instance["advertiserID"] = ad["advertiserID"]
         instance["appID"] = ad["appID"]
         instance["appPlatform"] = ad["appPlatform"]
 
-        user = self.db.user.find({"userID":instance['userID']})
+        user = self.db.user.find({"userID":instance['userID']})[0]
         instance["age"] = user["age"] 
         instance["gender"] = user["gender"] 
         instance["education"] = user["education"] 
@@ -44,31 +45,32 @@ class preDb(object):
         instance["hometown"] = user["hometown"] 
         instance["residence"] = user["residence"]
         
-        position = self.db.position.find({"positionID":instance['positionID']})
+        position = self.db.position.find({"positionID":instance['positionID']})[0]
         instance["positionID"] = position["positionID"] 
         instance["sitesetID"] = position["sitesetID"] 
         instance["positionType"] = position["positionType"]
 
         installed_app_list = []
-        for line in self.db.user_installedapps.find({"userID":user_id}):
-            installed_app_list.append(line('appID'))
+        for line in self.db.user_installedapps.find({"userID":instance['userID']}):
+            installed_app_list.append(line['appID'])
 
         for app_id in installed_app_list:
-            app_categories_id = 'installedAppCategories' + str(self.db.app_categories.find({"appID":app_id}))
+            app_category = self.db.app_categories.find({"appID":app_id})[0]['appCategory']
+            app_categories_id = 'installedAppCategory_' + str(app_category)
             if app_categories_id in instance:
                 instance[app_categories_id] += 1
             else:
                 instance[app_categories_id] = 1
         
-        for categories in self.app_categories:
-            categories_id = 'installedAppCategories' + str(categories)
-            if categories_id in instance:
-                instance[categories_id] /= len(installed_app_list)
+        for app_category in self.app_categories:
+            category_id = 'installedAppCategory_' + str(app_category)
+            if category_id in instance:
+                instance[category_id] /= len(installed_app_list)
             else:
-                instance[categories_id] = 0
+                instance[category_id] = 0
         
         return instance
 
-pre_db = pre_db()
-pre_db.app_categories()
+pre_db = preDb()
+pre_db.calc_app_categories()
 print(pre_db.get_a_train_instance(0))
