@@ -5,17 +5,9 @@ class preDb(object):
     def __init__(self):
         client = pymongo.MongoClient('localhost', 27017)
         self.db = client.pre
-
-        # self.ad_collection = db.ad
-        # self.user_installed_app_collection = db.user_installedapps
-        # self.position_collection = db.position
-        # self.app_categories_collection = db.app_categories
-        # self.user_collection = db.user
-        # self.user_app_actions_collection = db.user_app_actions
-        # self.test_collection = db.test
-        # self.train_collection = db.train
-
+        
         self.app_categories = []
+        self.calc_app_categories()
     
     def calc_app_categories(self):
         app_categories = []
@@ -24,6 +16,29 @@ class preDb(object):
                 app_categories.append(line["appCategory"])
         self.app_categories = app_categories.copy()
         print(self.app_categories)
+
+    def set_user_installedappsCategory(self,user_id):
+        installed_app_list = []
+        for line in self.db.user_installedapps.find({"userID":user_id}):
+            installed_app_list.append(line['appID'])
+
+        app_category_id_dict = {}
+        for app_id in installed_app_list:
+            app_category_id = self.db.app_categories.find({"appID":app_id})[0]['appCategory']
+            if app_category_id in app_category_id_dict:
+                app_category_id_dict[app_category_id] += 1
+            else:
+                app_category_id_dict[app_category_id] = 1
+            
+        for category_id in self.app_categories:
+            if category_id in app_category_id_dict:
+                app_category_id_dict[category_id] /= len(installed_app_list)
+            else:
+                app_category_id_dict[category_id] = 0
+    
+        print(app_category_id_dict)
+
+
 
     def get_a_train_instance(self,index):
         
@@ -72,5 +87,5 @@ class preDb(object):
         return instance
 
 pre_db = preDb()
-pre_db.calc_app_categories()
-print(pre_db.get_a_train_instance(0))
+pre_db.set_user_installedappsCategory(2798058)
+# print(pre_db.get_a_train_instance(0)
