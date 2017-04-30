@@ -6,7 +6,7 @@ class preDb(object):
         client = pymongo.MongoClient('localhost', 27017)
         self.db = client.pre
         
-        self.app_categories = []
+        self.app_categories = [2, 203, 104, 402, 301, 407, 101, 408, 106, 0, 201, 409, 503, 210, 108, 211, 1, 110, 405, 401, 109, 103, 209, 406, 303, 403, 105, 204]
         self.calc_app_categories()
     
     def calc_app_categories(self):
@@ -17,7 +17,11 @@ class preDb(object):
         self.app_categories = app_categories.copy()
         print(self.app_categories)
 
-    def set_user_installedappsCategory(self,user_id):
+    def get_user_installedappsCategory(self,user_id):
+        find_result = self.db.user_installedappsCategory.find({"userID":user_id})
+        if not find_result.count() == 0:
+            return find_result[0]["appsCategory"]
+        
         installed_app_list = []
         for line in self.db.user_installedapps.find({"userID":user_id}):
             installed_app_list.append(line['appID'])
@@ -29,14 +33,21 @@ class preDb(object):
                 app_category_id_dict[app_category_id] += 1
             else:
                 app_category_id_dict[app_category_id] = 1
-            
+        
+        installedappsCategory_rate = []
         for category_id in self.app_categories:
             if category_id in app_category_id_dict:
-                app_category_id_dict[category_id] /= len(installed_app_list)
+                installedappsCategory_rate.append(app_category_id_dict[category_id] / len(installed_app_list))
             else:
-                app_category_id_dict[category_id] = 0
-    
-        print(app_category_id_dict)
+                installedappsCategory_rate.append(0)
+        
+        self.db.user_installedappsCategory.insert(
+            {
+                "userID":user_id,
+                "appsCategory":installedappsCategory_rate
+            }
+        )
+        return installedappsCategory_rate
 
 
 
@@ -65,27 +76,12 @@ class preDb(object):
         instance["sitesetID"] = position["sitesetID"] 
         instance["positionType"] = position["positionType"]
 
+        installedappsCategory_rate = self.get_user_installedappsCategory(instance['userID'])
+        instance["appsCategory"] = installedappsCategory_rate
         installed_app_list = []
-        for line in self.db.user_installedapps.find({"userID":instance['userID']}):
-            installed_app_list.append(line['appID'])
-
-        for app_id in installed_app_list:
-            app_category = self.db.app_categories.find({"appID":app_id})[0]['appCategory']
-            app_categories_id = 'installedAppCategory_' + str(app_category)
-            if app_categories_id in instance:
-                instance[app_categories_id] += 1
-            else:
-                instance[app_categories_id] = 1
-        
-        for app_category in self.app_categories:
-            category_id = 'installedAppCategory_' + str(app_category)
-            if category_id in instance:
-                instance[category_id] /= len(installed_app_list)
-            else:
-                instance[category_id] = 0
         
         return instance
 
 pre_db = preDb()
-pre_db.set_user_installedappsCategory(2798058)
+pre_db.get_user_installedappsCategory(2798058)
 # print(pre_db.get_a_train_instance(0)
