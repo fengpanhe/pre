@@ -41,10 +41,13 @@ class preDb(object):
             else:
                 installedappsCategory_rate.append(0)
         
+        installed_app_num = len(installed_app_list)
+
         self.db.user_installedappsCategory.insert(
             {
                 "userID":user_id,
-                "appsCategory":installedappsCategory_rate
+                "appsCategory":installedappsCategory_rate,
+                "InstalledAppNum":installed_app_num
             }
         )
         return installedappsCategory_rate
