@@ -12,7 +12,7 @@
 
 !creativeID
 !!ad表中
-!!!creativeID（input）
+!!!creativeID
 !!!adID（input）
 !!!camgaignID（input）
 !!!advertiserID（input）
@@ -31,7 +31,7 @@
 !!user_installedappsCategory表中
 !!!用户安装的app类别比例情况（28类）（28个input）
 !!user_app_actions表相关
-!!!用户app操作流水操作次数（28类）（28个input）
+!!!用户app安装时间（待定）
 
 !positionID
 !!position表中
