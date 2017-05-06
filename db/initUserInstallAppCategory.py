@@ -1,4 +1,5 @@
-import pymongo
+# import pymongo
+
 from preDb import preDb
 
 pre_db = preDb()

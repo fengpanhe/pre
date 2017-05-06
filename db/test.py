@@ -1,12 +1,9 @@
-import pymongo
 
-from AdDb import AdDb
-from UserInstalledappsDb import UserInstalledappsDb
+import numpy as np
 
-client = pymongo.MongoClient('localhost', 27017)
+aa = [np.array([1, 2, 3]), np.array([4, 5, 6])]
+bb = [[2, 2, 2], [3, 3, 3]]
 
-db = client.pre
-
-user_installed_app_db = UserInstalledappsDb(db)
-
-print(user_installed_app_db.get_install_app_list(1))
+for a, b in zip(aa, bb):
+    print(type(a))
+    print(type(b))

@@ -25,6 +25,10 @@ class Network(object):
     pass
 
     def train(self, input_date, correct_result):
+        '''
+        input_data: 为一个 numpy 的链表，表示一组输入值
+        correct_result: 为正确值的链表，与input_data一一对应
+        '''
         error_times = 0
         diff_val = 0
         for input_val, out_put in zip(input_date, correct_result):
@@ -56,6 +60,10 @@ class Network(object):
         return {'error_times': error_times, "diff_val": diff_val}
 
     def test(self, input_date, correct_result):
+        '''
+        input_data: 为一个 numpy 的链表，表示一组输入值
+        correct_result: 为正确值的链表，与input_data一一对应
+        '''
         error_times = 0
         diff_val = 0
         for input_val, out_put in zip(input_date, correct_result):

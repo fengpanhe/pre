@@ -23,7 +23,7 @@ class preDb(object):
 
     def get_user_installedappsCategory(self, user_id):
         '''
-        得到用户的app安装列表的app分类占比和安装的app数量，app类别28类
+        得到用户的 app 安装列表的 app 分类占比和安装的app数量，app类别28类
         '''
         find_result = self.db.user_installedappsCategory.find_one({
             "userID":
@@ -75,14 +75,15 @@ class preDb(object):
 
     def get_user_app_actions(self, user_id):
         '''
-        得到用户的app操作行为的app分类次数，app类别28类
+        得到用户的 app 操作行为的 app 分类次数，app类别28类
         '''
 
     def get_a_train_instance(self, index):
         '''
         得到一条训练条目的输入数据和结果
         '''
-        #先在train_instance查找，有则直接返回
+
+        # 先在train_instance查找，有则直接返回
         find_result = self.db.train_instance.find_one({"index": index})
         if find_result is not None:
             return {
@@ -137,7 +138,7 @@ class preDb(object):
         # instance["sitesetID"] = position["sitesetID"]
         # instance["positionType"] = position["positionType"]
 
-        #TODO：安装列表时间的处理。
+        # TODO：安装列表时间的处理。
 
         installedappsCategory = self.get_user_installedappsCategory(
             instance['userID'])
@@ -147,12 +148,12 @@ class preDb(object):
         correct_result = 0.1
         if instance["label"] == 1 and instance["conversionTime"] / 10000 == instance["clickTime"] / 10000:
             correct_result = 0.9
-        
+
         self.db.train_instance.insert({
-                "index": index,
-                'input_val': input_val,
-                'correct_result': correct_result
-            })
+            "index": index,
+            'input_val': input_val,
+            'correct_result': correct_result
+        })
         return {
             'input_val': np.array(input_val),
             'correct_result': correct_result
