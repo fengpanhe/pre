@@ -5,7 +5,7 @@
 
 ![](./img/train.png)
 
-```
+```mermaid
 !label
 !clickTime
 !conversionTime
