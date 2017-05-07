@@ -1,9 +1,11 @@
 import numpy as np
+import math
 from Layer import Layer
 
 
 class Network(object):
-    def __init__(self, layer_num, layer_nodes_num, eta, momentum, weights_list):
+    def __init__(self, layer_num, layer_nodes_num, eta, momentum,
+                 weights_list):
         '''
         weights_list: 权值列表，二维list。依次从左到右，从上到下
         '''
@@ -11,8 +13,9 @@ class Network(object):
         self.eta = eta
         self.momentum = momentum
         self.layer = []
+        self.logloss = 0
         # 输入层
-        self.layer.append(Layer('input_layer'))
+        self.layer.append(Layer('input_layer', 0, []))
         # 隐藏层
         weight_num = 0
         for i in range(1, layer_num - 1):
@@ -38,6 +41,7 @@ class Network(object):
         '''
         error_times = 0
         diff_val = 0
+        loss_sum = 0
         for input_val, out_put in zip(input_date, correct_result):
             # 正向传播
             self.layer[0].layer_predict(input_val)
@@ -63,7 +67,13 @@ class Network(object):
                 error_times += 1
 
             diff_val += np.sum(np.square(predict_val - out_put))
+
+            if out_put == 0.9:
+                loss_sum += math.log(predict_val[0])
+            else:
+                loss_sum += math.log(1 - predict_val[0])
         pass
+        self.logloss = - loss_sum/len(input_date)
         return {'error_times': error_times, "diff_val": diff_val}
 
     def test(self, input_date, correct_result):
@@ -85,3 +95,10 @@ class Network(object):
             diff_val += np.sum(np.square(predict_val - out_put))
         pass
         return {'error_times': error_times, "diff_val": diff_val}
+
+    def get_weights_list(self):
+        weights_list = []
+        for layer in self.layer:
+            for weights in layer.get_weights_list():
+                weights_list.append(weights)
+        return weights_list

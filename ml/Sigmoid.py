@@ -7,7 +7,7 @@ class Sigmoid(object):
         """
         weight_num:输入值个数
         """
-        self.weights = weights
+        self.weights = np.array(weights)
         self.dif_val = np.zeros(len(self.weights) + 1)
         self.output = 0
         self.delta = 0

@@ -46,6 +46,12 @@ class Layer(object):
         #     print(input_val)
         for i in range(self.sigmoid_num):
             self.sigmoids[i].update_weight(input_val, eta, momentum)
+    
+    def get_weights_list(self):
+        weights_list = []
+        for sigmoid in self.sigmoids:
+            weights_list.append(sigmoid.weights.tolist())
+        return weights_list
 
     def print_weights(self):
         weights = []
