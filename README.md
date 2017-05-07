@@ -17,6 +17,8 @@
 !!!camgaignID（input）
 !!!advertiserID（input）
 !!!appID（input）
+!!!appID--app_categories表中
+!!!!appCategory（input）
 !!!appPlatform（input）
 
 !userID

@@ -1,18 +1,20 @@
 from Sigmoid import Sigmoid
 import numpy as np
+
+
 class Layer(object):
 
-    def __init__(self, layer_type, sigmoid_num=0, weight_num=0):
+    def __init__(self, layer_type, sigmoid_num, weights_list):
         self.layer_type = layer_type
         self.sigmoid_num = sigmoid_num
         self.sigmoids = []
         self.outputs = np.zeros(sigmoid_num)
         if not layer_type == 'input_layer':
             for i in range(self.sigmoid_num):
-                self.sigmoids.append(Sigmoid(weight_num))
+                self.sigmoids.append(Sigmoid(weights_list[i]))
 
     def layer_predict(self, input_val):
-        '''' 
+        '''
         通过感知单元计算预测值，保存到outputs
         '''
         if self.layer_type == 'input_layer':
@@ -32,7 +34,7 @@ class Layer(object):
                 # print('next_layer_wd_sum' + str(i) + str(next_layer_wd_sum))
                 self.sigmoids[i].calc_hidden_sigmoid_delta(next_layer_wd_sum)
         elif self.layer_type == 'output_layer':
-            
+
             for i in range(self.sigmoid_num):
                 # print('param' + str(param) + str(param[i]))
                 self.sigmoids[i].calc_output_sigmoid_delta(param[i])
@@ -56,4 +58,3 @@ class Layer(object):
         for sigmoid in self.sigmoids:
             deltas.append(sigmoid.delta)
         print(self.layer_type + 'deltas' + str(deltas))
-pass

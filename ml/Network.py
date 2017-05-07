@@ -3,7 +3,10 @@ from Layer import Layer
 
 
 class Network(object):
-    def __init__(self, layer_num, layer_nodes_num, eta, momentum):
+    def __init__(self, layer_num, layer_nodes_num, eta, momentum, weights_list):
+        '''
+        weights_list: 权值列表，二维list。依次从左到右，从上到下
+        '''
         self.layer_num = layer_num
         self.eta = eta
         self.momentum = momentum
@@ -11,15 +14,19 @@ class Network(object):
         # 输入层
         self.layer.append(Layer('input_layer'))
         # 隐藏层
+        weight_num = 0
         for i in range(1, layer_num - 1):
-            self.layer.append(
-                Layer('hidden_layer', layer_nodes_num[i], layer_nodes_num[i -
-                                                                          1]))
+            sigmoid_num = layer_nodes_num[i]
+            layer = Layer('hidden_layer', sigmoid_num,
+                          weights_list[weight_num:weight_num + sigmoid_num])
+            self.layer.append(layer)
+            weight_num += sigmoid_num
         pass
         # 输出层
-        self.layer.append(
-            Layer('output_layer', layer_nodes_num[layer_num - 1],
-                  layer_nodes_num[layer_num - 2]))
+        sigmoid_num = layer_nodes_num[layer_num - 1]
+        layer = Layer('output_layer', sigmoid_num,
+                      weights_list[weight_num:weight_num + sigmoid_num])
+        self.layer.append(layer)
         pass
 
     pass

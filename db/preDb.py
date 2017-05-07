@@ -100,11 +100,22 @@ class preDb(object):
         input.append(instance["telecomsOperator"])
 
         ad = self.db.ad.find_one({"creativeID": instance["creativeID"]})
-        input_val.append(ad["adID"])
-        input_val.append(ad["camgaignID"])
-        input_val.append(ad["advertiserID"])
-        input_val.append(ad["appID"])
-        input_val.append(ad["appPlatform"])
+        if ad is not None:
+            input_val.append(ad["adID"])
+            input_val.append(ad["camgaignID"])
+            input_val.append(ad["advertiserID"])
+            input_val.append(ad["appID"])
+            app_category = self.db.app_categories.find_one({
+                "appID": ad["appID"]
+            })
+            if app_category is not None:
+                input_val.append(app_category['appCategory'])
+            else:
+                input_val.append(0)
+            input_val.append(ad["appPlatform"])
+        else:
+            for i in range(6):
+                input_val.append(0)
         # instance["adID"] = ad["adID"]
         # instance["camgaignID"] = ad["camgaignID"]
         # instance["advertiserID"] = ad["advertiserID"]
@@ -112,13 +123,17 @@ class preDb(object):
         # instance["appPlatform"] = ad["appPlatform"]
 
         user = self.db.user.find_one({"userID": instance['userID']})
-        input_val.append(user["age"])
-        input_val.append(user["gender"])
-        input_val.append(user["education"])
-        input_val.append(user["marriageStatus"])
-        input_val.append(user["haveBaby"])
-        input_val.append(user["hometown"])
-        input_val.append(user["residence"])
+        if user is not None:
+            input_val.append(user["age"])
+            input_val.append(user["gender"])
+            input_val.append(user["education"])
+            input_val.append(user["marriageStatus"])
+            input_val.append(user["haveBaby"])
+            input_val.append(user["hometown"])
+            input_val.append(user["residence"])
+        else:
+            for i in range(7):
+                input_val.append(0)
         # instance["age"] = user["age"]
         # instance["gender"] = user["gender"]
         # instance["education"] = user["education"]
@@ -128,12 +143,15 @@ class preDb(object):
         # instance["residence"] = user["residence"]
 
         position = self.db.position.find_one({
-            "positionID":
-            instance['positionID']
+            "positionID": instance['positionID']
         })
-        input_val.append(position["positionID"])
-        input_val.append(position["sitesetID"])
-        input_val.append(position["positionType"])
+        if position is not None:
+            input_val.append(position["positionID"])
+            input_val.append(position["sitesetID"])
+            input_val.append(position["positionType"])
+        else:
+            for i in range(3):
+                input_val.append(0)
         # instance["positionID"] = position["positionID"]
         # instance["sitesetID"] = position["sitesetID"]
         # instance["positionType"] = position["positionType"]
