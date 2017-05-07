@@ -1,9 +1,18 @@
-
 import numpy as np
 
-aa = [np.array([1, 2, 3]), np.array([4, 5, 6])]
-bb = [[2, 2, 2], [3, 3, 3]]
+from preDb import preDb
 
-for a, b in zip(aa, bb):
-    print(type(a))
-    print(type(b))
+
+def test():
+    pre_db = preDb()
+    aa = np.array([1, 2, 3])
+    print(type(aa))
+    print(aa)
+    pre_db.db.nptest.insert({"id": 1, "aa": aa})
+
+    db_result = pre_db.db.nptest.find_one({"id": 1})
+    bb = db_result["aa"]
+    print(type(bb))
+    print(bb)
+
+test()
