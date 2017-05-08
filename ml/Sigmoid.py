@@ -48,4 +48,3 @@ class Sigmoid(object):
             1:] = eta * self.delta * input_val + momentum * self.dif_val[1:]
         self.dif_val[0] = eta * self.delta + momentum * self.dif_val[0]
         self.weights += self.dif_val
-pass
