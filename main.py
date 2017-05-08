@@ -1,3 +1,5 @@
+import numpy as np
+
 from db.preDb import preDb
 from ml.Network import Network
 
@@ -11,7 +13,21 @@ def main():
         input_date.append(instance['input_val'])
         correct_result.append(instance['correct_result'])
 
-    print("a")
+    layer_num = 3
+    layer_nodes_num = [len(input_date[0]), 3, 1]
+    eta = 0.3
+    momentum = 0.3
+    weights_list = []
+    for i in range(1, len(layer_nodes_num)):
+        for j in range(layer_nodes_num[i]):
+            weights = np.random.random(layer_nodes_num[i - 1] + 1) / 5 - 0.1
+            weights_list.append(weights)
+
+    network = Network(layer_num, layer_nodes_num, eta, momentum,
+                      weights_list)
+
+    for i in range(100):
+        network.train(input_date, correct_result)
 
 
 main()

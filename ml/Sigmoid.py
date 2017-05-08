@@ -7,7 +7,13 @@ class Sigmoid(object):
         """
         weight_num:输入值个数
         """
-        self.weights = np.array(weights)
+        if type(weights) == list:
+            self.weights = np.array(weights)
+        elif type(weights) == np.ndarray:
+            self.weights == weights
+        else:
+            print("weights type error")
+            exit()
         self.dif_val = np.zeros(len(self.weights) + 1)
         self.output = 0
         self.delta = 0
