@@ -1,9 +1,13 @@
 import numpy as np
-import os
-import sys
+import multiprocessing
 
 from db.preDb import preDb
 from ml.Network import Network
+
+
+manager = multiprocessing.Manager()
+aa = []
+aa = manager.list()
 
 
 def train():
@@ -34,8 +38,5 @@ def train():
 
 
 if __name__ == '__main__':
-    argv = sys.argv
-    argv_len = len(argv)
-    if argv_len == 1:
 
     train()
