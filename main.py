@@ -1,10 +1,13 @@
 import numpy as np
+import os
+import sys
 
 from db.preDb import preDb
 from ml.Network import Network
 
 
-def main():
+def train():
+    # 获得训练数据
     pre_db = preDb()
     input_date = []
     correct_result = []
@@ -30,4 +33,9 @@ def main():
         network.train(input_date, correct_result)
 
 
-main()
+if __name__ == '__main__':
+    argv = sys.argv
+    argv_len = len(argv)
+    if argv_len == 1:
+
+    train()
