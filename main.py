@@ -19,12 +19,10 @@ train_correct_result = manager.list()
 validation_input_date = manager.list()
 validation_correct_result = manager.list()
 
-pre_db = preDb()
-pre_db = manager.preDb()
-
 
 def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                              weights_list):
+    pre_db = preDb()
     network_info = str(layer_num) + '_' + str(layer_nodes_num) + \
         '_' + str(eta) + '_' + str(momentum)
     print('network_info: ' + network_info)
@@ -74,8 +72,8 @@ def train():
     p.join()
 
 
-if __name__ == '__main__':
-    # 获得训练数据
+def get_train_data():
+    pre_db = preDb()
     print('start get data')
     data_num = 1000
     train_data_num = int(data_num * 9 / 10)
@@ -89,4 +87,9 @@ if __name__ == '__main__':
         validation_input_date.append(instance['input_val'])
         validation_correct_result.append(instance['correct_result'])
     print('end get data')
+
+
+if __name__ == '__main__':
+    # 获得训练数据
+    get_train_data()
     train()
