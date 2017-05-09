@@ -20,6 +20,7 @@ validation_input_date = manager.list()
 validation_correct_result = manager.list()
 
 pre_db = preDb()
+pre_db = manager.preDb()
 
 
 def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
@@ -31,6 +32,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                       weights_list)
 
     for i in range(101):
+        network.train(train_input_date, train_correct_result)
         if i % 10 == 0:
             print(network_info + ':  ' + str(i))
             network.validation(validation_input_date,
@@ -46,7 +48,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'validation_logloss': network.validation_logloss,
                 'train_times': i
             })
-         network.train(train_input_date, train_correct_result)
+
     print(network_info + '  end')
 
 
