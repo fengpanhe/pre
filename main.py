@@ -84,8 +84,8 @@ def get_train_data():
 
     for i in range(train_data_num, data_num):
         instance = pre_db.get_a_train_instance(i)
-        validation_input_date.append(instance['input_val'])
-        validation_correct_result.append(instance['correct_result'])
+        validation_input_date.append(np.array(instance['input_val']))
+        validation_correct_result.append(np.array(instance['correct_result']))
     print('end get data')
 
 

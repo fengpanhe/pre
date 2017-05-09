@@ -87,7 +87,7 @@ class preDb(object):
         find_result = self.db.train_instance.find_one({"index": index})
         if find_result is not None:
             return {
-                'input_val': np.array(find_result["input_val"]),
+                'input_val': find_result["input_val"],
                 'correct_result': find_result["correct_result"]
             }
 
@@ -170,9 +170,9 @@ class preDb(object):
         self.db.train_instance.insert({
             "index": index,
             'input_val': input_val,
-            'correct_result': correct_result
+            'correct_result': [correct_result]
         })
         return {
-            'input_val': np.array(input_val),
-            'correct_result': correct_result
+            'input_val': input_val,
+            'correct_result': [correct_result]
         }
