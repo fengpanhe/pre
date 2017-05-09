@@ -68,7 +68,7 @@ def train():
         # train_validation_network(layer_num, layer_nodes_num, eta, momentum,
         #                          weights_list)
 
-
+# 
 if __name__ == '__main__':
     # 获得训练数据
     print('开始获得训练数据')
