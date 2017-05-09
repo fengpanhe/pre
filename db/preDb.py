@@ -4,14 +4,14 @@ import numpy as np
 
 class preDb(object):
     def __init__(self):
-        client = pymongo.MongoClient('localhost', 27017)
+        client = pymongo.MongoClient('localhost', 27017, connect=False)
         self.db = client.pre
 
         self.app_categories = [
             2, 203, 104, 402, 301, 407, 101, 408, 106, 0, 201, 409, 503, 210,
             108, 211, 1, 110, 405, 401, 109, 103, 209, 406, 303, 403, 105, 204
         ]
-        self.calc_app_categories()
+        # self.calc_app_categories()
 
     def calc_app_categories(self):
         app_categories = []
@@ -176,8 +176,3 @@ class preDb(object):
             'input_val': np.array(input_val),
             'correct_result': correct_result
         }
-
-
-pre_db = preDb()
-print(pre_db.get_user_installedappsCategory(2798058))
-# print(pre_db.get_a_train_instance(0)
