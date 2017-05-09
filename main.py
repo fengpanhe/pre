@@ -30,8 +30,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
     network = Network(layer_num, layer_nodes_num, eta, momentum,
                       weights_list)
 
-    for i in range(100):
-        network.train(train_input_date, train_correct_result)
+    for i in range(101):
         if i % 10 == 0:
             print(network_info + ':  ' + str(i))
             network.validation(validation_input_date,
@@ -47,6 +46,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'validation_logloss': network.validation_logloss,
                 'train_times': i
             })
+            network.train(train_input_date, train_correct_result)
     print(network_info + '  end')
 
 
@@ -75,7 +75,7 @@ def train():
 if __name__ == '__main__':
     # 获得训练数据
     print('start get data')
-    data_num = 10000
+    data_num = 1000
     train_data_num = int(data_num * 9 / 10)
     for i in range(train_data_num):
         instance = pre_db.get_a_train_instance(i)
