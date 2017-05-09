@@ -6,7 +6,7 @@ from ml.Layer import Layer
 class Network(object):
     def __init__(self, layer_num, layer_nodes_num, eta, momentum,
                  weights_list):
-        print('network_init')
+        # print('network_init')
         '''
         weights_list: 权值列表，二维list。依次从左到右，从上到下
         '''
