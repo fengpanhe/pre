@@ -11,7 +11,7 @@ class Sigmoid(object):
         if type(weights) == list:
             self.weights = np.array(weights)
         elif type(weights) == np.ndarray:
-            self.weights == weights
+            self.weights = weights.copy()
         else:
             print("weights type error")
             exit()

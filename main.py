@@ -46,7 +46,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'validation_logloss': network.validation_logloss,
                 'train_times': i
             })
-            network.train(train_input_date, train_correct_result)
+        network.train(train_input_date, train_correct_result)
     print(network_info + '  end')
 
 
@@ -71,7 +71,7 @@ def train():
     p.close()
     p.join()
 
-# 
+
 if __name__ == '__main__':
     # 获得训练数据
     print('start get data')
