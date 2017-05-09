@@ -1,16 +1,18 @@
-# import os
+import numpy as np
 import multiprocessing
 
 manager = multiprocessing.Manager()
+
 aa = []
+bb = []
 aa = manager.list()
 
 
 def exec_test(a, b):
-    aa.append(a)
+    
+    print(bb)
+    aa[1].append(a)
     print(str(aa))
-
-
 
 
 class ClockProcess(multiprocessing.Process):
@@ -25,7 +27,9 @@ class ClockProcess(multiprocessing.Process):
 
 
 if __name__ == '__main__':
-    aa.append(-1)
+    aa.append(np.array([1, 2, 3]))
+    aa.append([0, 0, 0])
+    bb = aa[1]
     p = multiprocessing.Pool()
     for i in range(4):
         p.apply_async(exec_test, args=(i, 1))
