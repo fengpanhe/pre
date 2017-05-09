@@ -170,9 +170,9 @@ class preDb(object):
         self.db.train_instance.insert({
             "index": index,
             'input_val': input_val,
-            'correct_result': [correct_result]
+            'correct_result': correct_result
         })
         return {
             'input_val': input_val,
-            'correct_result': [correct_result]
+            'correct_result': correct_result
         }

@@ -19,7 +19,7 @@ class Layer(object):
         通过感知单元计算预测值，保存到outputs
         '''
         if self.layer_type == 'input_layer':
-            self.outputs = input_val / 255
+            self.outputs = input_val
         else:
             for i in range(self.sigmoid_num):
                 self.outputs[i] = self.sigmoids[i].predict(input_val)

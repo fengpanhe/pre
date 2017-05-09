@@ -15,7 +15,7 @@ class Sigmoid(object):
         else:
             print("weights type error")
             exit()
-        self.dif_val = np.zeros(len(self.weights) + 1)
+        self.dif_val = np.zeros(len(self.weights))
         self.output = 0
         self.delta = 0
 
