@@ -24,7 +24,9 @@ pre_db = preDb()
 
 def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                              weights_list):
-
+    network_info = str(layer_num) + '_' + str(layer_nodes_num) + \
+        '_' + str(eta) + '_' + str(momentum)
+    print('network_info: ' + network_info)
     network = Network(layer_num, layer_nodes_num, eta, momentum,
                       weights_list)
 
@@ -34,7 +36,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
             network.validation(validation_input_date,
                                validation_correct_result)
             pre_db.db.train_validation_network.insert({
-                'network_id': str(layer_num) + '_' + str(layer_nodes_num) + '_' + str(eta) + '_' + str(momentum),
+                'network_id': network_info,
                 'layer_num': layer_num,
                 'layer_nodes_num': layer_nodes_num,
                 'eta': eta,
@@ -44,6 +46,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'validation_logloss': network.validation_logloss,
                 'train_times': i
             })
+    print(network_info + '  end')
 
 
 def train():
@@ -68,6 +71,7 @@ def train():
 
 if __name__ == '__main__':
     # 获得训练数据
+    print('开始获得训练数据')
     data_num = 10000
     train_data_num = int(data_num * 9 / 10)
     for i in range(train_data_num):
@@ -79,4 +83,5 @@ if __name__ == '__main__':
         instance = pre_db.get_a_train_instance(i)
         validation_input_date.append(instance['input_val'])
         validation_correct_result.append(instance['correct_result'])
+    print('已获得训练数据')
     train()

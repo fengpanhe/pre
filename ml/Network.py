@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from Layer import Layer
+from ml.Layer import Layer
 
 
 class Network(object):

@@ -1,4 +1,4 @@
-from Sigmoid import Sigmoid
+from ml.Sigmoid import Sigmoid
 import numpy as np
 
 
