@@ -5,6 +5,7 @@ import numpy as np
 class Layer(object):
 
     def __init__(self, layer_type, sigmoid_num, weights_list):
+        print('layer_init')
         self.layer_type = layer_type
         self.sigmoid_num = sigmoid_num
         self.sigmoids = []

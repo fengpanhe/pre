@@ -4,6 +4,7 @@ import math
 
 class Sigmoid(object):
     def __init__(self, weights):
+        print('Sigmoid_init')
         """
         weight_num:输入值个数
         """
