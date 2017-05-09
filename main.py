@@ -44,7 +44,8 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'weights_list': network.get_weights_list(),
                 'train_logloss': network.train_logloss,
                 'validation_logloss': network.validation_logloss,
-                'train_times': i
+                'train_times': i,
+                'data_num': len(train_input_date) + len(validation_input_date)
             })
 
     print(network_info + '  end')
