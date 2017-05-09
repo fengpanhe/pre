@@ -33,6 +33,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
     for i in range(100):
         network.train(train_input_date, train_correct_result)
         if i % 10 == 0:
+            print(network_info + ':  ' + str(i))
             network.validation(validation_input_date,
                                validation_correct_result)
             pre_db.db.train_validation_network.insert({
