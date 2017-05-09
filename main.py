@@ -71,7 +71,7 @@ def train():
 # 
 if __name__ == '__main__':
     # 获得训练数据
-    print('开始获得训练数据')
+    print('start get data')
     data_num = 10000
     train_data_num = int(data_num * 9 / 10)
     for i in range(train_data_num):
@@ -83,5 +83,5 @@ if __name__ == '__main__':
         instance = pre_db.get_a_train_instance(i)
         validation_input_date.append(instance['input_val'])
         validation_correct_result.append(instance['correct_result'])
-    print('已获得训练数据')
+    print('end get data')
     train()

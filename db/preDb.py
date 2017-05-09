@@ -96,8 +96,8 @@ class preDb(object):
 
         input_val = []
 
-        input.append(instance["connectionType"])
-        input.append(instance["telecomsOperator"])
+        input_val.append(instance["connectionType"])
+        input_val.append(instance["telecomsOperator"])
 
         ad = self.db.ad.find_one({"creativeID": instance["creativeID"]})
         if ad is not None:
