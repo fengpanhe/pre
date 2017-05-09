@@ -67,6 +67,8 @@ def train():
             layer_num, layer_nodes_num, eta, momentum, weights_list))
         # train_validation_network(layer_num, layer_nodes_num, eta, momentum,
         #                          weights_list)
+    p.close()
+    p.join()
 
 # 
 if __name__ == '__main__':
