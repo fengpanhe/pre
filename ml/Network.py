@@ -48,7 +48,7 @@ class Network(object):
         loss_sum = 0
         for input_val, out_put in zip(input_date, correct_result):
             # 正向传播
-            self.layer[0].layer_predict(input_val)
+            self.layer[0].layer_predict(np.array(input_val))
             for j in range(1, self.layer_num):
                 # print('j = ' + str(j))
                 self.layer[j].layer_predict(self.layer[j - 1].outputs)
@@ -72,7 +72,7 @@ class Network(object):
 
             # diff_val += np.sum(np.square(predict_val - out_put))
 
-            if out_put == 0.9:
+            if out_put[0] == 0.9:
                 loss_sum += math.log(predict_val[0])
             else:
                 loss_sum += math.log(1 - predict_val[0])
@@ -89,7 +89,7 @@ class Network(object):
         # diff_val = 0
         loss_sum = 0
         for input_val, out_put in zip(input_date, correct_result):
-            self.layer[0].layer_predict(input_val)
+            self.layer[0].layer_predict(np.array(input_val))
             for j in range(1, self.layer_num):
                 self.layer[j].layer_predict(self.layer[j - 1].outputs)
             pass
@@ -98,7 +98,7 @@ class Network(object):
             # if not np.argmax(predict_val) == np.argmax(out_put):
             #     error_times += 1
             # diff_val += np.sum(np.square(predict_val - out_put))
-            if out_put == 0.9:
+            if out_put[0] == 0.9:
                 loss_sum += math.log(predict_val[0])
             else:
                 loss_sum += math.log(1 - predict_val[0])
