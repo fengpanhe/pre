@@ -15,4 +15,7 @@ def test():
     print(type(bb))
     print(bb)
 
-test()
+
+if __name__ == '__main__':
+	print("hwlloeorld")
+#	test()

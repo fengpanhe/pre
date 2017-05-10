@@ -178,6 +178,7 @@ class preDb(object):
         }
 
 
+
 pre_db = preDb()
 print(pre_db.get_user_installedappsCategory(2798058))
 # print(pre_db.get_a_train_instance(0)
