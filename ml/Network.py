@@ -1,11 +1,12 @@
 import numpy as np
 import math
-from Layer import Layer
+from ml.Layer import Layer
 
 
 class Network(object):
     def __init__(self, layer_num, layer_nodes_num, eta, momentum,
                  weights_list):
+        # print('network_init')
         '''
         weights_list: 权值列表，二维list。依次从左到右，从上到下
         '''
@@ -13,7 +14,10 @@ class Network(object):
         self.eta = eta
         self.momentum = momentum
         self.layer = []
-        self.logloss = 0
+
+        self.train_logloss = 0
+        self.validation_logloss = 0
+
         # 输入层
         self.layer.append(Layer('input_layer', 0, []))
         # 隐藏层
@@ -39,12 +43,12 @@ class Network(object):
         input_data: 为一个 numpy 的链表，表示一组输入值
         correct_result: 为正确值的链表，与input_data一一对应
         '''
-        error_times = 0
-        diff_val = 0
+        # error_times = 0
+        # diff_val = 0
         loss_sum = 0
         for input_val, out_put in zip(input_date, correct_result):
             # 正向传播
-            self.layer[0].layer_predict(input_val)
+            self.layer[0].layer_predict(np.array(input_val))
             for j in range(1, self.layer_num):
                 # print('j = ' + str(j))
                 self.layer[j].layer_predict(self.layer[j - 1].outputs)
@@ -63,38 +67,44 @@ class Network(object):
             pass
             predict_val = self.layer[self.layer_num - 1].outputs
 
-            if not np.argmax(predict_val) == np.argmax(out_put):
-                error_times += 1
+            # if not np.argmax(predict_val) == np.argmax(out_put):
+            #     error_times += 1
 
-            diff_val += np.sum(np.square(predict_val - out_put))
+            # diff_val += np.sum(np.square(predict_val - out_put))
 
-            if out_put == 0.9:
+            if out_put[0] == 0.9:
                 loss_sum += math.log(predict_val[0])
             else:
                 loss_sum += math.log(1 - predict_val[0])
         pass
-        self.logloss = - loss_sum/len(input_date)
-        return {'error_times': error_times, "diff_val": diff_val}
+        self.train_logloss = -1 * loss_sum / len(input_date)
+        # return {'error_times': error_times, "diff_val": diff_val}
 
-    def test(self, input_date, correct_result):
+    def validation(self, input_date, correct_result):
         '''
         input_data: 为一个 numpy 的链表，表示一组输入值
         correct_result: 为正确值的链表，与input_data一一对应
         '''
-        error_times = 0
-        diff_val = 0
+        # error_times = 0
+        # diff_val = 0
+        loss_sum = 0
         for input_val, out_put in zip(input_date, correct_result):
-            self.layer[0].layer_predict(input_val)
+            self.layer[0].layer_predict(np.array(input_val))
             for j in range(1, self.layer_num):
                 self.layer[j].layer_predict(self.layer[j - 1].outputs)
             pass
             predict_val = self.layer[self.layer_num - 1].outputs
 
-            if not np.argmax(predict_val) == np.argmax(out_put):
-                error_times += 1
-            diff_val += np.sum(np.square(predict_val - out_put))
+            # if not np.argmax(predict_val) == np.argmax(out_put):
+            #     error_times += 1
+            # diff_val += np.sum(np.square(predict_val - out_put))
+            if out_put[0] == 0.9:
+                loss_sum += math.log(predict_val[0])
+            else:
+                loss_sum += math.log(1 - predict_val[0])
         pass
-        return {'error_times': error_times, "diff_val": diff_val}
+        self.validation_logloss = -1 * loss_sum / len(input_date)
+        # return {'error_times': error_times, "diff_val": diff_val}
 
     def get_weights_list(self):
         weights_list = []

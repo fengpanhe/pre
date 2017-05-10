@@ -16,6 +16,4 @@ def test():
     print(bb)
 
 
-if __name__ == '__main__':
-	print("hwlloeorld")
-#	test()
+test()

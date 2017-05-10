@@ -4,11 +4,18 @@ import math
 
 class Sigmoid(object):
     def __init__(self, weights):
+        # print('Sigmoid_init')
         """
         weight_num:输入值个数
         """
-        self.weights = np.array(weights)
-        self.dif_val = np.zeros(len(self.weights) + 1)
+        if type(weights) == list:
+            self.weights = np.array(weights)
+        elif type(weights) == np.ndarray:
+            self.weights = weights.copy()
+        else:
+            print("weights type error")
+            exit()
+        self.dif_val = np.zeros(len(self.weights))
         self.output = 0
         self.delta = 0
 
@@ -42,4 +49,3 @@ class Sigmoid(object):
             1:] = eta * self.delta * input_val + momentum * self.dif_val[1:]
         self.dif_val[0] = eta * self.delta + momentum * self.dif_val[0]
         self.weights += self.dif_val
-pass
