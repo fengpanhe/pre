@@ -23,8 +23,9 @@ validation_correct_result = manager.list()
 def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                              weights_list):
     pre_db = preDb()
+    data_num = len(train_input_date) + len(validation_input_date)
     network_info = str(layer_num) + '_' + str(layer_nodes_num) + \
-        '_' + str(eta) + '_' + str(momentum)
+        '_' + str(eta) + '_' + str(momentum) + '_' + str(data_num)
     print('network_info: ' + network_info)
     network = Network(layer_num, layer_nodes_num, eta, momentum,
                       weights_list)
@@ -36,7 +37,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
             network.validation(validation_input_date,
                                validation_correct_result)
             pre_db.db.train_validation_network.insert({
-                'network_id': network_info,
+                '_id': network_info +  '_' + str(i),
                 'layer_num': layer_num,
                 'layer_nodes_num': layer_nodes_num,
                 'eta': eta,
@@ -45,7 +46,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
                 'train_logloss': network.train_logloss,
                 'validation_logloss': network.validation_logloss,
                 'train_times': i,
-                'data_num': len(train_input_date) + len(validation_input_date)
+                'data_num': data_num
             })
 
     print(network_info + '  end')
@@ -76,7 +77,7 @@ def train():
 def get_train_data():
     pre_db = preDb()
     print('start get data')
-    data_num = 1000
+    data_num = 1000000
     train_data_num = int(data_num * 9 / 10)
     for i in range(train_data_num):
         instance = pre_db.get_a_train_instance(i)
