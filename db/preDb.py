@@ -26,8 +26,7 @@ class preDb(object):
         得到用户的 app 安装列表的 app 分类占比和安装的app数量，app类别28类
         '''
         find_result = self.db.user_installedappsCategory.find_one({
-            "userID":
-            user_id
+            "userID": user_id
         })
         if find_result is not None:
             return {

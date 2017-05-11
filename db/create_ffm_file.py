@@ -72,7 +72,7 @@ def creat_ffm_file(index, num):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        line += format(17, user['userID'], 1)
+        line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
         line += format(18, -1, user['age'] / 80)
 
         field = 19
