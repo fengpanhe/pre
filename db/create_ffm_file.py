@@ -24,7 +24,7 @@ def creat_ffm_file(index, num):
     print(file_name + ' start')
     file = open('~/train_ffm_data/' + file_name, 'w')
     pre_db = preDb()
-    instances = pre_db.db.train.find().limit(num).skip(i)
+    instances = pre_db.db.train.find().limit(num).skip(index)
     for instance in instances:
         line = ''
         ad = pre_db.db.ad.find_one({"creativeID": instance["creativeID"]})
