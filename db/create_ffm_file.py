@@ -1,6 +1,6 @@
 import multiprocessing
 
-from db.preDb import preDb
+from preDb import preDb
 
 
 def get_clicltime(click_time):
@@ -22,7 +22,7 @@ def format(field, index, value):
 def creat_ffm_file(index, num):
     file_name = 'train_' + str(index) + '_' + str(index + num)
     print(file_name + ' start')
-    file = open('~/train_ffm_data/' + file_name, 'w')
+    file = open('/root/train_ffm_data/' + file_name, 'w')
     pre_db = preDb()
     instances = pre_db.db.train.find().limit(num).skip(index)
     for instance in instances:
@@ -118,8 +118,7 @@ def creat_ffm_file(index, num):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        appCategory_list = pre_db.get_user_installedappsCategory(instance[
-            "userID"])
+        appCategory_list = pre_db.get_user_installedappsCategory(instance["userID"])["appsCategory"]
         for i in range(len(pre_db.app_categories)):
             line += format(50, pre_db.app_categories[i], appCategory_list[i])
 
@@ -129,11 +128,9 @@ def creat_ffm_file(index, num):
     print(file_name + ' end')
 
 
-
 def get_train_instance_len():
     pre_db = preDb()
     return pre_db.db.train.count()
-
 
 
 if __name__ == '__main__':
