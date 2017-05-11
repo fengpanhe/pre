@@ -37,7 +37,7 @@ def train_validation_network(layer_num, layer_nodes_num, eta, momentum,
             network.validation(validation_input_date,
                                validation_correct_result)
             pre_db.db.train_validation_network.insert({
-                '_id': network_info +  '_' + str(i),
+                '_id': network_info + '_' + str(i),
                 'layer_num': layer_num,
                 'layer_nodes_num': layer_nodes_num,
                 'eta': eta,
