@@ -5,7 +5,7 @@
 | train表中          | 附表                             | <field1>: | <index1>:             | <value1>                     |
 | ---------------- | ------------------------------ | --------- | --------------------- | ---------------------------- |
 | label            |                                | 0/1       |                       |                              |
-| clickTime        |                                | 39        | 39                    | <clickTime的后四位转成分钟/144>      |
+| clickTime        |                                | 39：       | 39：                   | <clickTime的后四位转成分钟/1440>     |
 | conversionTime   |                                |           |                       |                              |
 | creativeID       | ```ad表中```                     |           |                       |                              |
 |                  | creativeID                     | 10:       | 10<creativeID>:       | 1                            |
