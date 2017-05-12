@@ -59,7 +59,7 @@ class FfmTrain(object):
         s = subprocess.check_output(
             shell_command, shell=True, cwd=self.ffm_program_path)
         file = open(self.data_path + 'tr_va_logloss', 'w')
-        file.write(s)
+        file.write(s.decode())
         file.close()
 
     def predict(self):
