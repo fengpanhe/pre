@@ -19,12 +19,17 @@ def format(field, index, value):
     return string
 
 
-def creat_ffm_file(index, num):
-    file_name = 'train_' + str(index) + '_' + str(index + num)
-    print(file_name + ' start')
-    file = open('/root/train_ffm_data/' + file_name, 'w')
+def creat_ffm_file(index, num, data_type):
+    file_path = '/root/' + data_type + '_ffm_data/' + data_type + str(index) + '_' + str(index + num)
+    print(file_path + ' start')
     pre_db = preDb()
-    instances = pre_db.db.train.find().limit(num).skip(index)
+    instances = []
+    if data_type == 'train':
+        instances = pre_db.db.train.find().limit(num).skip(index)
+    else:
+        instances = pre_db.db.test.find().limit(num).skip(index)
+
+    file = open(file_path, 'w')
     for instance in instances:
         line = ''
         ad = pre_db.db.ad.find_one({"creativeID": instance["creativeID"]})
@@ -50,7 +55,7 @@ def creat_ffm_file(index, num):
             line += '\n error:app_category is none'
             break
 
-        if instance['label'] == 1 and instance["conversionTime"] / 10000 == instance["clickTime"] / 10000:
+        if instance['label'] == 1 and int(instance["conversionTime"] / 10000) == int(instance["clickTime"] / 10000):
             line += str(1)
         else:
             line += str(0)
@@ -125,7 +130,7 @@ def creat_ffm_file(index, num):
         line += '\n'
         file.write(line)
     file.close()
-    print(file_name + ' end')
+    print(file_path + ' end')
 
 
 def get_train_instance_len():
@@ -133,14 +138,28 @@ def get_train_instance_len():
     return pre_db.db.train.count()
 
 
+def get_test_instance_len():
+    pre_db = preDb()
+    return pre_db.db.test.count()
+
+
 if __name__ == '__main__':
     # data_num = get_train_instance_len()
     data_num = 1000
     num = int(data_num / 20)
+    index = 0
 
     p = multiprocessing.Pool()
-    for i in range(20):
-        p.apply_async(creat_ffm_file, args=(i * num, num))
+    while index < data_num:
+        if (index + num) > data_num:
+            p.apply_async(creat_ffm_file, args=(index, data_num - index, 'train'))
+            break
+        p.apply_async(creat_ffm_file, args=(index, num))
+        index += num
+        pass
+    # data_num = get_test_instance_len()
+    data_num = 1000
+    p.apply_async(creat_ffm_file, args=(0, data_num, 'test'))
 
     p.close()
     p.join()
