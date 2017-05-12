@@ -53,7 +53,7 @@ class FfmTrain(object):
         os.makedirs(result_path)
 
         shell_command = './ffm-train '
-        shell_command += ' -l ' + str(options['lambda'])
+        shell_command += ' -l ' + options['lambda']
         shell_command += ' -k ' + str(options['factor'])
         shell_command += ' -t ' + str(options['iteration'])
         shell_command += ' -r ' + str(options['eta'])
