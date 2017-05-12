@@ -15,6 +15,9 @@ if __name__ == '__main__':
     for i in range(2, 20):
         print(i)
         options['factor'] = i
-        result_dir = str(options)
+        result_dir = 'lambda_' + str(options['lambda'])
+        result_dir += '_factor_' + str(options['factor'])
+        result_dir += '_iteration_' + str(options['iteration'])
+        result_dir += '_eta_' + str(options['eta'])
         ffm_train.train_validation(options, result_dir)
         ffm_train.predict(result_dir)
