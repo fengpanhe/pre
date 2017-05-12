@@ -44,33 +44,41 @@ class FfmTrain(object):
         shell_command = 'cat ' + test_ffm + ' > test_ffm'
         subprocess.call(shell_command, shell=True, cwd=test_ffm_data_path)
 
-    def train_validation(self):
+    def train_validation(self, options, result_dir):
         print('train_validation')
         train_tr_ffm = self.data_path + 'train_ffm_data/train_tr_ffm'
         train_va_ffm = self.data_path + 'train_ffm_data/train_va_ffm'
+
+        result_path = self.data_path + result_dir + '/'
+        os.makedirs(result_path)
+
         shell_command = './ffm-train '
-        shell_command += ' -t ' + str(100)
+        shell_command += ' -l ' + str(options['lambda'])
+        shell_command += ' -k ' + str(options['factor'])
+        shell_command += ' -t ' + str(options['iteration'])
+        shell_command += ' -r ' + str(options['eta'])
         shell_command += ' -s ' + str(10)
         shell_command += ' -p ' + train_va_ffm
         shell_command += ' --auto-stop '
         shell_command += train_tr_ffm
-        shell_command += ' ' + self.data_path + 'model'
+        shell_command += ' ' + result_path + 'model'
         print(shell_command)
         s = subprocess.check_output(
             shell_command, shell=True, cwd=self.ffm_program_path)
-        file = open(self.data_path + 'tr_va_logloss', 'w')
+        file = open(result_path + 'tr_va_logloss', 'w')
         file.write(s.decode())
         file.close()
 
-    def predict(self):
+    def predict(self, result_dir):
         print('predict')
+        result_path = self.data_path + result_dir + '/'
         test_ffm = self.data_path + 'test_ffm_data/test_ffm'
         shell_command = './ffm-predict '
         shell_command += test_ffm + ' '
-        shell_command += self.data_path + 'model' + ' '
-        shell_command += self.data_path + 'output'
+        shell_command += result_path + 'model' + ' '
+        shell_command += result_path + 'output'
         print(shell_command)
         subprocess.call(shell_command, shell=True, cwd=self.ffm_program_path)
         shell_command = 'nl -s \',\' ' + 'output > submission.csv'
         print(shell_command)
-        subprocess.call(shell_command, shell=True, cwd=self.data_path)
+        subprocess.call(shell_command, shell=True, cwd=result_path)
