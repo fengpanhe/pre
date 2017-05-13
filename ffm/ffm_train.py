@@ -87,9 +87,11 @@ class FfmTrain(object):
         model_path = self.data_path + 'train_validation_model/'
         if not os.path.exists(model_path):
             os.makedirs(model_path)
-        self.model_file = self.data_path + model_path + 'model'
+        self.model_file = model_path + 'model'
 
-        self.result_path = self.data_path + result_dir + '/'
+        self.result_path = self.data_path + 'result/' + result_dir + '/'
+        if not os.path.exists(self.result_path):
+            os.makedirs(self.result_path)
 
         shell_command = './ffm-train '
         shell_command += ' -l ' + options['lambda']
