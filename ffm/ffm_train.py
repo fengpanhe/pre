@@ -28,12 +28,14 @@ class FfmTrain(object):
         train_ffm_data_path = self.data_path + 'train_ffm_data/'
         test_ffm_data_path = self.data_path + 'test_ffm_data/'
         if train_data:
-            os.makedirs(train_ffm_data_path)
+            if not os.path.exists(train_ffm_data_path):
+                os.makedirs(train_ffm_data_path)
             shell_command = 'rm ./*'
             print(shell_command)
             subprocess.call(shell_command, shell=True, cwd=train_ffm_data_path)
         if test_data:
-            os.makedirs(test_ffm_data_path)
+            if not os.path.exists(test_ffm_data_path):
+                os.makedirs(test_ffm_data_path)
             shell_command = 'rm ./*'
             print(shell_command)
             subprocess.call(shell_command, shell=True, cwd=test_ffm_data_path)
@@ -83,7 +85,8 @@ class FfmTrain(object):
         print('train_validation')
 
         model_path = self.data_path + 'train_validation_model/'
-        os.makedirs(model_path)
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
         self.model_file = self.data_path + model_path + 'model'
 
         self.result_path = self.data_path + result_dir + '/'

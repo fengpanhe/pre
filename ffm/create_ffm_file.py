@@ -182,26 +182,3 @@ class CreateFfmFile(object):
     def get_test_instance_len(self):
         pre_db = preDb()
         return pre_db.db.test.count()
-
-
-if __name__ == '__main__':
-    # data_num = get_train_instance_len()
-    # data_num = 1000
-    # num = int(data_num / 20)
-    # index = 0
-
-    # p = multiprocessing.Pool()
-    # while index < data_num:
-    #     if (index + num) > data_num:
-    #         p.apply_async(creat_ffm_file, args=(
-    #             index, data_num - index, 'train'))
-    #         break
-    #     p.apply_async(creat_ffm_file, args=(index, num))
-    #     index += num
-    #     pass
-    # # data_num = get_test_instance_len()
-    # data_num = 1000
-    # p.apply_async(creat_ffm_file, args=(0, data_num, 'test'))
-
-    # p.close()
-    # p.join()
