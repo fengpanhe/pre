@@ -5,7 +5,7 @@ if __name__ == '__main__':
     ffm_program_path = '/data/db/pre/libffm/'
     data_path = os.path.abspath(os.path.pardir)
     ffm_train = FfmTrain(data_path + '/', ffm_program_path)
-    ffm_train.init_data(True, False)
+    ffm_train.init_data(False, False)
     options = {
         'lambda': '0.00002',
         'factor': 9,
