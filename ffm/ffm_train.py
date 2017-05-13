@@ -98,9 +98,9 @@ class FfmTrain(object):
         shell_command += ' -k ' + str(options['factor'])
         shell_command += ' -t ' + str(options['iteration'])
         shell_command += ' -r ' + str(options['eta'])
-        shell_command += ' -s ' + str(10)
+        shell_command += ' -s ' + str(24)
         shell_command += ' -p ' + self.train_va_ffm_file
-        shell_command += ' --auto-stop '
+        shell_command += ' ' + options['auto_stop'] + ' '
         shell_command += self.train_tr_ffm_file
         shell_command += ' ' + self.model_file
         print(shell_command)
