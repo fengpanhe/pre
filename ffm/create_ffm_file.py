@@ -143,32 +143,32 @@ class CreateFfmFile(object):
     def __init__(self, dir_path):
         self.dir_path = dir_path
 
-    def create_ffm_file(self):
+    def create_ffm_file(self, train_data, test_data):
         train_dir_path = self.dir_path + 'train_ffm_data/'
         test_dir_path = self.dir_path + 'test_ffm_data/'
 
-        train_data_num = self.get_train_instance_len()
-        train_num = int(train_data_num / 20) + 1
-        index = 0
-
         p = multiprocessing.Pool()
-        while index < train_data_num:
-            if (index + train_num) > train_data_num:
+        if train_data:
+            train_data_num = self.get_train_instance_len()
+            train_num = int(train_data_num / 100) + 1
+            index = 0
+            while index < train_data_num:
+                if (index + train_num) > train_data_num:
+                    p.apply_async(creat_a_ffm_file, args=(
+                        index, train_data_num - index, 'train', train_dir_path))
+                    break
                 p.apply_async(creat_a_ffm_file, args=(
-                    index, train_data_num - index, 'train', train_dir_path))
-                break
+                    index, train_num, 'train', train_dir_path))
+                index += train_num
+                pass
+        if test_data:
+            test_data_num = self.get_test_instance_len()
             p.apply_async(creat_a_ffm_file, args=(
-                index, train_num, 'train', train_dir_path))
-            index += train_num
-            pass
-
-        test_data_num = self.get_test_instance_len()
-        p.apply_async(creat_a_ffm_file, args=(
-            0, 100000, 'test', test_dir_path))
-        p.apply_async(creat_a_ffm_file, args=(
-            100000, 100000, 'test', test_dir_path))
-        p.apply_async(creat_a_ffm_file, args=(
-            200000, test_data_num, 'test', test_dir_path))
+                0, 100000, 'test', test_dir_path))
+            p.apply_async(creat_a_ffm_file, args=(
+                100000, 100000, 'test', test_dir_path))
+            p.apply_async(creat_a_ffm_file, args=(
+                200000, test_data_num, 'test', test_dir_path))
 
         p.close()
         p.join()
@@ -186,22 +186,22 @@ class CreateFfmFile(object):
 
 if __name__ == '__main__':
     # data_num = get_train_instance_len()
-    data_num = 1000
-    num = int(data_num / 20)
-    index = 0
+    # data_num = 1000
+    # num = int(data_num / 20)
+    # index = 0
 
-    p = multiprocessing.Pool()
-    while index < data_num:
-        if (index + num) > data_num:
-            p.apply_async(creat_ffm_file, args=(
-                index, data_num - index, 'train'))
-            break
-        p.apply_async(creat_ffm_file, args=(index, num))
-        index += num
-        pass
-    # data_num = get_test_instance_len()
-    data_num = 1000
-    p.apply_async(creat_ffm_file, args=(0, data_num, 'test'))
+    # p = multiprocessing.Pool()
+    # while index < data_num:
+    #     if (index + num) > data_num:
+    #         p.apply_async(creat_ffm_file, args=(
+    #             index, data_num - index, 'train'))
+    #         break
+    #     p.apply_async(creat_ffm_file, args=(index, num))
+    #     index += num
+    #     pass
+    # # data_num = get_test_instance_len()
+    # data_num = 1000
+    # p.apply_async(creat_ffm_file, args=(0, data_num, 'test'))
 
-    p.close()
-    p.join()
+    # p.close()
+    # p.join()
