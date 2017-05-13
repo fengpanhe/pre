@@ -23,12 +23,20 @@ class FfmTrain(object):
 
     def init_data(self, train_data, test_data):
         print('init_data')
-        dirs = os.listdir(self.data_path)
+        # dirs = os.listdir(self.data_path)
 
         train_ffm_data_path = self.data_path + 'train_ffm_data/'
         test_ffm_data_path = self.data_path + 'test_ffm_data/'
-        os.makedirs(train_ffm_data_path)
-        os.makedirs(test_ffm_data_path)
+        if train_data:
+            os.makedirs(train_ffm_data_path)
+            shell_command = 'rm ./*'
+            print(shell_command)
+            subprocess.call(shell_command, shell=True, cwd=train_ffm_data_path)
+        if test_data:
+            os.makedirs(test_ffm_data_path)
+            shell_command = 'rm ./*'
+            print(shell_command)
+            subprocess.call(shell_command, shell=True, cwd=test_ffm_data_path)
 
         self.train_tr_ffm_file = train_ffm_data_path + 'train_tr_ffm'
         self.train_va_ffm_file = train_ffm_data_path + 'train_va_ffm'
