@@ -150,7 +150,7 @@ class CreateFfmFile(object):
         p = multiprocessing.Pool()
         if train_data:
             train_data_num = self.get_train_instance_len()
-            train_num = int(train_data_num / 100) + 1
+            train_num = int(train_data_num / 1000) + 1
             index = 0
             while index < train_data_num:
                 if (index + train_num) > train_data_num:
