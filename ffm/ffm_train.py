@@ -1,6 +1,7 @@
 import os
 import subprocess
 import random
+import time
 
 from db.preDb import preDb
 from ffm.create_ffm_file import CreateFfmFile
@@ -20,6 +21,8 @@ class FfmTrain(object):
         self.model_file = ''
 
         self.result_path = ''
+
+        self.time_tag = time.strftime("%m-%d", time.localtime())
 
     def init_data(self, train_data, test_data):
         print('init_data')
@@ -106,9 +109,21 @@ class FfmTrain(object):
         print(shell_command)
         s = subprocess.check_output(
             shell_command, shell=True, cwd=self.ffm_program_path)
+        record = s.decode()
         file = open(self.result_path + 'tr_va_logloss', 'w')
-        file.write(s.decode())
+        file.write(record)
         file.close()
+        stop_logloss = float(record.split()[-10])
+        pre_db = preDb()
+        pre_db.db.cross_validation.insert({
+            'lambda': options['lambda'],
+            'factor': options['factor'],
+            'iteration': options['iteration'],
+            'eta': options['eta'],
+            'result_path': self.result_path,
+            'time_tag': self.time_tag,
+            'logloss': stop_logloss
+        })
 
     def predict(self):
         print('predict')
@@ -135,13 +150,14 @@ class FfmTrain(object):
         print(shell_command)
         s = subprocess.check_output(
             shell_command, shell=True, cwd=self.ffm_program_path)
-        s.decode()
-        logloss_avg = float(s.split()[-1].decode())
+        record = s.decode()
+        logloss_avg = float(record.split()[-1].decode())
         pre_db = preDb()
         pre_db.db.cross_validation.insert({
             'lambda': options['lambda'],
             'factor': options['factor'],
             'iteration': options['iteration'],
             'eta': options['eta'],
+            'time_tag': self.time_tag,
             'logloss_avg': logloss_avg
         })

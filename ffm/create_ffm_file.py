@@ -79,7 +79,7 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
+        # line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
         line += format(18, -1, user['age'] / 80)
 
         field = 19
@@ -128,7 +128,7 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         appCategory_list = pre_db.get_user_installedappsCategory(instance["userID"])[
             "appsCategory"]
         for i in range(len(pre_db.app_categories)):
-            line += format(50,
+            line += format(30,
                            pre_db.app_categories[i], appCategory_list[i])
 
         line += '\n'
