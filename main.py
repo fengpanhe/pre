@@ -16,11 +16,11 @@ if __name__ == '__main__':
         'eta': 0.2,
         'auto_stop': '--auto-stop'
     }
-    for i in (2, 10):
+    for i in (4, 8):
         options['factor'] = i
-        for j in range(1, 10):
+        for j in range(1, 5):
             options['lambda'] = '0.0000' + str(j)
-            for k in range(1, 10):
+            for k in range(1, 5):
                 options['eta'] = str(k / 10)
 
                 result_dir = '_' + options['lambda']

@@ -115,7 +115,7 @@ class FfmTrain(object):
         file.close()
         stop_logloss = float(record.split()[-10])
         pre_db = preDb()
-        pre_db.db.cross_validation.insert({
+        pre_db.db.train_validation_result.insert({
             'lambda': options['lambda'],
             'factor': options['factor'],
             'iteration': options['iteration'],
