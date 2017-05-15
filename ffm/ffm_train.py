@@ -22,7 +22,7 @@ class FfmTrain(object):
 
         self.result_path = ''
 
-        self.time_tag = time.strftime("%m-%d", time.localtime())
+        self.time_tag = time.strftime("%m-%d-%H-%M", time.localtime())
 
     def init_data(self, train_data, test_data):
         print('init_data')
@@ -134,7 +134,16 @@ class FfmTrain(object):
         shell_command += self.result_path + 'output'
         print(shell_command)
         subprocess.call(shell_command, shell=True, cwd=self.ffm_program_path)
+        # 加行号
         shell_command = 'nl -s \',\' ' + 'output > submission.csv'
+        print(shell_command)
+        subprocess.call(shell_command, shell=True, cwd=self.result_path)
+        # 第一行添加instanceID,prob
+        shell_command = 'sed  -i \'1iinstanceID,prob\' submission.csv '
+        print(shell_command)
+        subprocess.call(shell_command, shell=True, cwd=self.result_path)
+        # 删除空格
+        shell_command = 'sed -i \'s/[ ]*//g\' submission.csv '
         print(shell_command)
         subprocess.call(shell_command, shell=True, cwd=self.result_path)
 
