@@ -1,6 +1,6 @@
 import multiprocessing
 
-from preDb import preDb
+from db.preDb import preDb
 
 
 def get_clicltime(click_time):
@@ -19,12 +19,17 @@ def format(field, index, value):
     return string
 
 
-def creat_ffm_file(index, num):
-    file_name = 'train_' + str(index) + '_' + str(index + num)
-    print(file_name + ' start')
-    file = open('/root/train_ffm_data/' + file_name, 'w')
+def creat_a_ffm_file(index, num, data_type, dir_path):
+    file_path = dir_path + data_type + str(index) + '_' + str(index + num)
+    print(file_path + ' start')
     pre_db = preDb()
-    instances = pre_db.db.train.find().limit(num).skip(index)
+    instances = []
+    if data_type == 'train':
+        instances = pre_db.db.train.find().limit(num).skip(index)
+    else:
+        instances = pre_db.db.test.find().limit(num).skip(index)
+
+    file = open(file_path, 'w')
     for instance in instances:
         line = ''
         ad = pre_db.db.ad.find_one({"creativeID": instance["creativeID"]})
@@ -50,12 +55,14 @@ def creat_ffm_file(index, num):
             line += '\n error:app_category is none'
             break
 
-        if instance['label'] == 1 and instance["conversionTime"] / 10000 == instance["clickTime"] / 10000:
+# and int(instance["conversionTime"] / 10000) == int(instance["clickTime"]
+# / 10000)
+        if instance['label'] == 1:
             line += str(1)
         else:
             line += str(0)
 
-        line += format(30, -1, get_clicltime(instance['clickTime'] / 1440))
+        line += format(30, -1, get_clicltime(instance['clickTime']) / 1440)
         line += format(10, instance['creativeID'], 1)
         line += format(11, ad['adID'], 1)
         line += format(12, ad['camgaignID'], 1)
@@ -72,7 +79,7 @@ def creat_ffm_file(index, num):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
+        # line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
         line += format(18, -1, user['age'] / 80)
 
         field = 19
@@ -118,29 +125,60 @@ def creat_ffm_file(index, num):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        appCategory_list = pre_db.get_user_installedappsCategory(instance["userID"])["appsCategory"]
+        appCategory_list = pre_db.get_user_installedappsCategory(instance["userID"])[
+            "appsCategory"]
         for i in range(len(pre_db.app_categories)):
-            line += format(50, pre_db.app_categories[i], appCategory_list[i])
+            line += format(30,
+                           pre_db.app_categories[i], appCategory_list[i])
 
         line += '\n'
         file.write(line)
     file.close()
-    print(file_name + ' end')
+    print(file_path + ' end')
 
 
-def get_train_instance_len():
-    pre_db = preDb()
-    return pre_db.db.train.count()
+class CreateFfmFile(object):
+    """docstring for CreateFfmFile"""
 
+    def __init__(self, dir_path):
+        self.dir_path = dir_path
 
-if __name__ == '__main__':
-    # data_num = get_train_instance_len()
-    data_num = 1000
-    num = int(data_num / 20)
+    def create_ffm_file(self, train_data, test_data):
+        train_dir_path = self.dir_path + 'train_ffm_data/'
+        test_dir_path = self.dir_path + 'test_ffm_data/'
 
-    p = multiprocessing.Pool()
-    for i in range(20):
-        p.apply_async(creat_ffm_file, args=(i * num, num))
+        p = multiprocessing.Pool()
+        if train_data:
+            train_data_num = self.get_train_instance_len()
+            train_num = int(train_data_num / 1000) + 1
+            index = 0
+            while index < train_data_num:
+                if (index + train_num) > train_data_num:
+                    p.apply_async(creat_a_ffm_file, args=(
+                        index, train_data_num - index, 'train', train_dir_path))
+                    break
+                p.apply_async(creat_a_ffm_file, args=(
+                    index, train_num, 'train', train_dir_path))
+                index += train_num
+                pass
+        if test_data:
+            test_data_num = self.get_test_instance_len()
+            p.apply_async(creat_a_ffm_file, args=(
+                0, 100000, 'test', test_dir_path))
+            p.apply_async(creat_a_ffm_file, args=(
+                100000, 100000, 'test', test_dir_path))
+            p.apply_async(creat_a_ffm_file, args=(
+                200000, test_data_num, 'test', test_dir_path))
 
-    p.close()
-    p.join()
+        p.close()
+        p.join()
+
+        return [train_dir_path, test_dir_path]
+
+    def get_train_instance_len(self):
+        pre_db = preDb()
+        return pre_db.db.train.count()
+
+    def get_test_instance_len(self):
+        pre_db = preDb()
+        return pre_db.db.test.count()
