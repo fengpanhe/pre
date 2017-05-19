@@ -10,8 +10,10 @@ def get_clicltime(click_time):
 
 
 def time_to_minute(time):
+    if time == 0:
+        return 0
     minute = time % 100
-    hour = int((click_time % 10000) / 100)
+    hour = int((time % 10000) / 100)
     day = int(time / 10000)
     return day * 1440 + hour * 60 + minute
 
@@ -141,16 +143,16 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
 
         app_actions = pre_db.get_user_app_actions(instance["userID"],
                                                   instance["clickTime"])
-        app_actions_catrgory_list = app_actions["appsCategory"]
+        app_actions_category_list = app_actions["appsCategory"]
         for i in range(len(pre_db.app_categories)):
             line += format(31, pre_db.app_categories[i],
-                           app_actions_catrgory_list[i])
-        app_actions_catrgory_time = app_actions[
+                           app_actions_category_list[i])
+        app_actions_category_time = app_actions[
             "app_actions_category_final_time"]
         for i in range(len(pre_db.app_categories)):
             line += format(
                 32, pre_db.app_categories[i],
-                time_to_minute(app_actions_catrgory_time[i]) / 43200)
+                time_to_minute(app_actions_category_time[i]) / 43200)
 
         line += '\n'
         file.write(line)

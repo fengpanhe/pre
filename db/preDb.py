@@ -85,7 +85,7 @@ class preDb(object):
         if find_result is not None:
             return {
                 "appsCategory": find_result['appsCategory'],
-                "app_actions_category_final_time"； find_result['app_actions_category_final_time'],
+                "app_actions_category_final_time": find_result['app_actions_category_final_time'],
                 "InstalledAppNum": find_result["InstalledAppNum"]
             }
 
@@ -112,12 +112,12 @@ class preDb(object):
             "userID": user_id,
             "instance_time": instance_time,
             "appsCategory": app_actions_category_num,
-            "app_actions_category_final_time"；app_actions_category_final_time,
+            "app_actions_category_final_time": app_actions_category_final_time,
             "InstalledAppNum": app_num
         })
         return {
             "appsCategory": app_actions_category_num,
-            "app_actions_category_final_time"； app_actions_category_final_time,
+            "app_actions_category_final_time": app_actions_category_final_time,
             "InstalledAppNum": app_num
         }
 
