@@ -8,7 +8,7 @@ if __name__ == '__main__':
     ffm_program_path = '/data/db/pre/libffm/'
     data_path = os.path.abspath(os.path.pardir)
     ffm_train = FfmTrain(data_path + '/', ffm_program_path)
-    ffm_train.init_data(False, False)
+    ffm_train.init_data(True, True)
     options = {
         'lambda': '0.00002',
         'factor': 6,
@@ -16,10 +16,10 @@ if __name__ == '__main__':
         'eta': 0.2,
         'auto_stop': '--auto-stop'
     }
-    for i in (9, 11):
+    for i in (12, 13, 14, 15):
         options['factor'] = i
-        for j in range(1, 2):
-            options['lambda'] = '0.0000' + str(j)
+        for j in ('03', '04', '05', '06'):
+            options['lambda'] = '0.0000' + j
             for k in range(1, 2):
                 options['eta'] = str(k / 10)
 

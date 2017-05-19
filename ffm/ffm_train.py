@@ -119,6 +119,7 @@ class FfmTrain(object):
             'lambda': options['lambda'],
             'factor': options['factor'],
             'iteration': options['iteration'],
+            'iter': record.split()[-2],
             'eta': options['eta'],
             'result_path': self.result_path,
             'time_tag': self.time_tag,

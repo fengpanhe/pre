@@ -9,6 +9,13 @@ def get_clicltime(click_time):
     return hour * 60 + minute
 
 
+def time_to_minute(time):
+    minute = time % 100
+    hour = int((click_time % 10000) / 100)
+    day = int(time / 10000)
+    return day * 1440 + hour * 60 + minute
+
+
 def format(field, index, value):
     string = ''
     if index == -1:
@@ -43,14 +50,16 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
             break
 
         position = pre_db.db.position.find_one({
-            "positionID": instance['positionID']
+            "positionID":
+            instance['positionID']
         })
         if position is None:
             line += '\n error:position is none'
             break
 
-        app_category = pre_db.db.app_categories.find_one(
-            {"appID": ad["appID"]})
+        app_category = pre_db.db.app_categories.find_one({
+            "appID": ad["appID"]
+        })
         if app_category is None:
             line += '\n error:app_category is none'
             break
@@ -125,11 +134,23 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        appCategory_list = pre_db.get_user_installedappsCategory(instance["userID"])[
-            "appsCategory"]
+        appCategory_list = pre_db.get_user_installedappsCategory(
+            instance["userID"])["appsCategory"]
         for i in range(len(pre_db.app_categories)):
-            line += format(30,
-                           pre_db.app_categories[i], appCategory_list[i])
+            line += format(30, pre_db.app_categories[i], appCategory_list[i])
+
+        app_actions = pre_db.get_user_app_actions(instance["userID"],
+                                                  instance["clickTime"])
+        app_actions_catrgory_list = app_actions["appsCategory"]
+        for i in range(len(pre_db.app_categories)):
+            line += format(31, pre_db.app_categories[i],
+                           app_actions_catrgory_list[i])
+        app_actions_catrgory_time = app_actions[
+            "app_actions_category_final_time"]
+        for i in range(len(pre_db.app_categories)):
+            line += format(
+                32, pre_db.app_categories[i],
+                time_to_minute(app_actions_catrgory_time[i]) / 43200)
 
         line += '\n'
         file.write(line)
@@ -154,21 +175,25 @@ class CreateFfmFile(object):
             index = 0
             while index < train_data_num:
                 if (index + train_num) > train_data_num:
-                    p.apply_async(creat_a_ffm_file, args=(
-                        index, train_data_num - index, 'train', train_dir_path))
+                    p.apply_async(
+                        creat_a_ffm_file,
+                        args=(index, train_data_num - index, 'train',
+                              train_dir_path))
                     break
-                p.apply_async(creat_a_ffm_file, args=(
-                    index, train_num, 'train', train_dir_path))
+                p.apply_async(
+                    creat_a_ffm_file,
+                    args=(index, train_num, 'train', train_dir_path))
                 index += train_num
                 pass
         if test_data:
             test_data_num = self.get_test_instance_len()
-            p.apply_async(creat_a_ffm_file, args=(
-                0, 100000, 'test', test_dir_path))
-            p.apply_async(creat_a_ffm_file, args=(
-                100000, 100000, 'test', test_dir_path))
-            p.apply_async(creat_a_ffm_file, args=(
-                200000, test_data_num, 'test', test_dir_path))
+            p.apply_async(
+                creat_a_ffm_file, args=(0, 100000, 'test', test_dir_path))
+            p.apply_async(
+                creat_a_ffm_file, args=(100000, 100000, 'test', test_dir_path))
+            p.apply_async(
+                creat_a_ffm_file,
+                args=(200000, test_data_num, 'test', test_dir_path))
 
         p.close()
         p.join()

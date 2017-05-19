@@ -1,5 +1,6 @@
 import pymongo
-import numpy as np
+
+# import numpy as np
 
 
 class preDb(object):
@@ -26,7 +27,8 @@ class preDb(object):
         得到用户的 app 安装列表的 app 分类占比和安装的app数量，app类别28类
         '''
         find_result = self.db.user_installedappsCategory.find_one({
-            "userID": user_id
+            "userID":
+            user_id
         })
         if find_result is not None:
             return {
@@ -72,10 +74,53 @@ class preDb(object):
             "appNum": installed_app_num
         }
 
-    def get_user_app_actions(self, user_id):
+    def get_user_app_actions(self, user_id, instance_time):
         '''
         得到用户的 app 操作行为的 app 分类次数，app类别28类
         '''
+        find_result = self.db.user_app_actions_tmp.find_one({
+            "userID": user_id,
+            "instance_time": instance_time
+        })
+        if find_result is not None:
+            return {
+                "appsCategory": find_result['appsCategory'],
+                "app_actions_category_final_time"； find_result['app_actions_category_final_time'],
+                "InstalledAppNum": find_result["InstalledAppNum"]
+            }
+
+        app_actions_category_num = []
+        app_actions_category_final_time = []
+        for i in range(len(self.app_categories)):
+            app_actions_category_num.append(0)
+            app_actions_category_final_time.append(0)
+
+        app_num = 0
+        for line in self.db.user_app_actions.find({"userID": user_id}):
+            if line["installTime"] < instance_time:
+                app_num += 1
+                app_category = self.db.app_categories.find_one({"appID": line['appID']})['appCategory']
+                index = self.app_categories.index(app_category)
+                app_actions_category_num[index] += 1
+                if line["installTime"] > app_actions_category_final_time[index]:
+                    app_actions_category_final_time[index] = line["installTime"]
+
+        for i in range(len(app_actions_category_num)):
+            if app_actions_category_num[i] != 0:
+                app_actions_category_num[i] /= app_num
+        self.db.user_app_actions_tmp.insert({
+            "userID": user_id,
+            "instance_time": instance_time,
+            "appsCategory": app_actions_category_num,
+            "app_actions_category_final_time"；app_actions_category_final_time,
+            "InstalledAppNum": app_num
+        })
+        return {
+            "appsCategory": app_actions_category_num,
+            "app_actions_category_final_time"； app_actions_category_final_time,
+            "InstalledAppNum": app_num
+        }
+
 
     def get_a_train_instance(self, index):
         '''
@@ -142,7 +187,8 @@ class preDb(object):
         # instance["residence"] = user["residence"]
 
         position = self.db.position.find_one({
-            "positionID": instance['positionID']
+            "positionID":
+            instance['positionID']
         })
         if position is not None:
             input_val.append(position["positionID"])
@@ -171,7 +217,4 @@ class preDb(object):
             'input_val': input_val,
             'correct_result': correct_result
         })
-        return {
-            'input_val': input_val,
-            'correct_result': correct_result
-        }
+        return {'input_val': input_val, 'correct_result': correct_result}
