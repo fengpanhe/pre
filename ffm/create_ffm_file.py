@@ -152,7 +152,7 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         for i in range(len(pre_db.app_categories)):
             line += format(
                 32, pre_db.app_categories[i],
-                time_to_minute(app_actions_category_time[i]) / 43200)
+                time_to_minute(app_actions_category_time[i]) / 44640)
 
         line += '\n'
         file.write(line)
