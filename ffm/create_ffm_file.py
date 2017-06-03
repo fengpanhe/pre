@@ -136,10 +136,10 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        appCategory_list = pre_db.get_user_installedappsCategory(
-            instance["userID"])["appsCategory"]
-        install_app_num = pre_db.get_user_installedappsCategory(
-            instance["userID"])["InstalledAppNum"]
+        appCategory = pre_db.get_user_installedappsCategory(
+            instance["userID"])
+        appCategory_list = appCategory["appsCategory"]
+        install_app_num = appCategory["InstalledAppNum"]
         for i in range(len(pre_db.app_categories)):
             line += format(30, pre_db.app_categories[i], appCategory_list[i])
 
