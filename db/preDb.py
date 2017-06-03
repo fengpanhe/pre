@@ -12,6 +12,8 @@ class preDb(object):
             2, 203, 104, 402, 301, 407, 101, 408, 106, 0, 201, 409, 503, 210,
             108, 211, 1, 110, 405, 401, 109, 103, 209, 406, 303, 403, 105, 204
         ]
+        self.install_app_max_num = [5, 80, 182, 201, 131, 61, 0, 30, 112, 209, 83, 39,
+                                    97, 30, 79, 49, 1, 43, 88, 149, 63, 24, 123, 17, 38, 68, 35, 10]
         # self.calc_app_categories()
 
     def calc_app_categories(self):
@@ -99,11 +101,13 @@ class preDb(object):
         for line in self.db.user_app_actions.find({"userID": user_id}):
             if line["installTime"] < instance_time:
                 app_num += 1
-                app_category = self.db.app_categories.find_one({"appID": line['appID']})['appCategory']
+                app_category = self.db.app_categories.find_one(
+                    {"appID": line['appID']})['appCategory']
                 index = self.app_categories.index(app_category)
                 app_actions_category_num[index] += 1
                 if line["installTime"] > app_actions_category_final_time[index]:
-                    app_actions_category_final_time[index] = line["installTime"]
+                    app_actions_category_final_time[
+                        index] = line["installTime"]
 
         for i in range(len(app_actions_category_num)):
             if app_actions_category_num[i] != 0:
@@ -120,7 +124,6 @@ class preDb(object):
             "app_actions_category_final_time": app_actions_category_final_time,
             "InstalledAppNum": app_num
         }
-
 
     def get_a_train_instance(self, index):
         '''
