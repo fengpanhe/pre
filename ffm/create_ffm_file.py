@@ -72,66 +72,75 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
             line += str(1)
         else:
             line += str(0)
+        field = 10
+        line += format(field, -1, get_clicltime(instance['clickTime']) / 1440)
+        field += 1
+        line += format(field, instance['creativeID'], 1)
+        field += 1
+        line += format(field, ad['adID'], 1)
+        field += 1
+        line += format(field, ad['camgaignID'], 1)
+        field += 1
+        line += format(field, ad['advertiserID'], 1)
+        # field += 1
+        # line += format(field, ad['appID'], 1)
 
-        line += format(30, -1, get_clicltime(instance['clickTime']) / 1440)
-        line += format(10, instance['creativeID'], 1)
-        line += format(11, ad['adID'], 1)
-        line += format(12, ad['camgaignID'], 1)
-        line += format(13, ad['advertiserID'], 1)
-        line += format(14, ad['appID'], 1)
-
-        field = 15
+        field += 1
         index = app_category['appCategory']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 16
+        field += 1
         index = ad['appPlatform']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
         # line += ' ' + str(17) + ':' + str(user['userID']) + ':' + str(1)
-        line += format(18, -1, user['age'] / 80)
+        field += 1
+        line += format(field, -1, user['age'] / 80)
 
-        field = 19
+        field += 1
         index = user['gender']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 20
+        field += 1
         index = user['education']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 21
+        field += 1
         index = user['marriageStatus']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 22
+        field += 1
         index = user['haveBaby']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 23
+        field += 1
         index = user['hometown']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        field = 24
+        field += 1
         index = user['residence']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
 
-        line += format(25, position['positionID'], 1)
-        line += format(26, position['sitesetID'], 1)
-        line += format(27, position['positionType'], 1)
+        field += 1
+        line += format(field, position['positionID'], 1)
+        field += 1
+        line += format(field, position['sitesetID'], 1)
+        field += 1
+        line += format(field, position['positionType'], 1)
 
-        field = 28
+        field += 1
         index = instance['connectionType']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
-        field = 29
+        field += 1
         index = instance['telecomsOperator']
         value = 0 if index == 0 else 1
         line += format(field, index, value)
@@ -139,28 +148,33 @@ def creat_a_ffm_file(index, num, data_type, dir_path):
         appCategory = pre_db.get_user_installedappsCategory(
             instance["userID"])
         appCategory_list = appCategory["appsCategory"]
-        install_app_num = appCategory["InstalledAppNum"]
+        install_app_num = appCategory["appNum"]
+        field += 1
         for i in range(len(pre_db.app_categories)):
-            line += format(30, pre_db.app_categories[i], appCategory_list[i])
+            line += format(field,
+                           pre_db.app_categories[i], appCategory_list[i])
 
+        field += 1
         for i in range(len(pre_db.app_categories)):
             value = appCategory_list[
                 i] * install_app_num / pre_db.install_app_max_num[i]
             if value > 1:
                 value = 1
-            line += format(31, pre_db.app_categories[i], value)
+            line += format(field, pre_db.app_categories[i], value)
 
         app_actions = pre_db.get_user_app_actions(instance["userID"],
                                                   instance["clickTime"])
         app_actions_category_list = app_actions["appsCategory"]
+        field += 1
         for i in range(len(pre_db.app_categories)):
-            line += format(32, pre_db.app_categories[i],
+            line += format(field, pre_db.app_categories[i],
                            app_actions_category_list[i])
         app_actions_category_time = app_actions[
             "app_actions_category_final_time"]
+        field += 1
         for i in range(len(pre_db.app_categories)):
             line += format(
-                33, pre_db.app_categories[i],
+                field, pre_db.app_categories[i],
                 time_to_minute(app_actions_category_time[i]) / 44640)
 
         line += '\n'
